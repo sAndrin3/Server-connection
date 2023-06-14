@@ -4,6 +4,7 @@ import config from '../db/config.js';
 // Get all Users
 
 export async function getUsers(req, res) {
+
     try {
         let pool = await sql.connect(config.sql);
         const result = await pool.request().query("select * from users");
