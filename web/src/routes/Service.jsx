@@ -1,6 +1,8 @@
 import Hero from "../components/Hero.jsx";
 import Navbar from "../components/Navbar.jsx";
-import AboutImg from "../assets/1.jpg"
+import AboutImg from "../assets/1.jpg";
+import Footer from "../components/Footer.jsx"
+import Trip from "../components/Trip.jsx"
 
 function Service() {
     return (
@@ -12,6 +14,8 @@ function Service() {
           title="Service"
           btnClass="hide"
         />
+        <Trip/>
+        <Footer/>
       </>
     )
   }

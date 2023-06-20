@@ -8,6 +8,8 @@ import Home from "./routes/Home";
 import About from "./routes/About";
 import Service from "./routes/Service";
 import Contact from "./routes/Contact";
+import Register from './routes/Register';
+import TravelPlan from './routes/TravelPlan';
 
 function App() {
   
@@ -21,6 +23,8 @@ function App() {
           <Route path="/about" element={<About/>}/>
           <Route path="/service" element={<Service/>}/>
           <Route path="/contact" element={<Contact/>}/>
+          <Route path="/register" element={<Register/>}/>
+          <Route path="/travelplan" element={<TravelPlan/>}/>
         </Routes>
         </BrowserRouter>
     </div>

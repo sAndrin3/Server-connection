@@ -2,6 +2,9 @@ import Destination from "../components/Destination.jsx";
 import Hero from "../components/Hero.jsx";
 import Navbar from "../components/Navbar.jsx";
 import Trip from "../components/Trip.jsx";
+import Footer from "../components/Footer.jsx"
+import { Link } from "react-router-dom";
+
 
 function Home() {
   return (
@@ -16,8 +19,11 @@ function Home() {
     url="/"
     btnClass="show"
     />
+    <Link to="/travelplan"> <button className="btnplan">Travel Plan</button> </Link>
+    
     <Destination/>
     <Trip/>
+    <Footer/>
     </>
   );
 }

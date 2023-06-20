@@ -4,6 +4,7 @@ function Hero(props) {
 
     return (
       <>
+    
       <div className={props.cName}>
       <img src={props.heroImg} alt="HeroImg" />
         {/* <img alt="HeroImg" src="props.heroImg"/> */}

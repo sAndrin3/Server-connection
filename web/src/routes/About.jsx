@@ -1,6 +1,8 @@
 import Hero from "../components/Hero.jsx";
 import Navbar from "../components/Navbar.jsx";
-import AboutImg from "../assets/night.jpg"
+import AboutImg from "../assets/night.jpg";
+import Footer from "../components/Footer.jsx"
+import AboutUs from "../components/AboutUs.jsx";
 
 function About() {
     return (
@@ -12,6 +14,8 @@ function About() {
           title="About"
           btnClass="hide"
         />
+        <AboutUs/>
+        <Footer/>
       </>
     )
   }
