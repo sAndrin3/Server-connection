@@ -14,13 +14,9 @@ function Login() {
 
   const schema = yup.object().shape({
     Name: yup.string().required("Name is required"),
-    password: yup
-      .string()
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{4,}$/,
-        "Password must contain at least 4 characters, uppercase, lowercase, number, and one special case character"
-      ),
+    password: yup.string().min(4, "Password must be at least 4 characters long").required("Password is required"),
   });
+  
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
@@ -35,6 +31,7 @@ function Login() {
       <Navbar />
 
       <form onSubmit={handleSubmit(onSubmit)} className="form-container2">
+        <h4 className="banner">Login Page</h4>
         <div className="form-group2">
           <input type="text" placeholder="Name" {...register("Name")} />
           <p className="error-message">{errors.Name?.message}</p>

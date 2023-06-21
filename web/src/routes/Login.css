@@ -5,6 +5,11 @@
     justify-content: center;
     height: 100vh;
   }
+
+  .banner{
+    font-size: 21px;
+    font-weight: 400;
+  }
   
   .form-container2 {
     display: flex;

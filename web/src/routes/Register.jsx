@@ -19,12 +19,7 @@ function Register() {
       .number("ContactNumber must be a number")
       .positive("ContactNumber must be a positive number")
       .required("ContactNumber is required"),
-    password: yup
-      .string()
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{4,}$/,
-        'password must contain at least 4 characters, uppercase, lowercase, number, and one special case character'
-      )
+      password: yup.string().min(4, "Password must be at least 4 characters long").required("Password is required"),
   });
 
   const { register, handleSubmit, formState: { errors } } = useForm({
