@@ -3,11 +3,12 @@ import bodyParser from 'body-parser';
 import config from './src/db/config.js';
 import { userRoutes } from './src/routes/tourRoutes.js';
 import jwt  from 'jsonwebtoken';
+import cors from 'cors'
 
 
 const app = express();
 
-// app.use
+app.use(cors());
 
 app.use(bodyParser.json());
 

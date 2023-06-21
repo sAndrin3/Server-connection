@@ -5,8 +5,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import "./Login.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -14,7 +17,7 @@ function Login() {
 
   const schema = yup.object().shape({
     Name: yup.string().required("Name is required"),
-    password: yup.string().min(4, "Password must be at least 4 characters long").required("Password is required"),
+    Password: yup.string().min(4, "Password must be at least 4 characters long").required("Password is required"),
   });
   
 
@@ -23,8 +26,16 @@ function Login() {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
-  };
+    axios.post("http://localhost:8081/auth/login", data)
+    .then(({data}) => {
+      if(data.token){
+        navigate("/")
+      }
+    })
+    .catch(({response}) => {
+      alert(response.data.error)
+    });
+  }
 
   return (
     <div className="login">
@@ -41,7 +52,7 @@ function Login() {
           <input
             type={showPassword ? "text" : "password"} // Updated type attribute
             placeholder="Password"
-            {...register("password")}
+            {...register("Password")}
           />
           {showPassword ? (
             <FaEyeSlash

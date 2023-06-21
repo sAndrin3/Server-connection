@@ -6,20 +6,20 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import "./Register.css"
 import {FaEye, FaEyeSlash} from "react-icons/fa"
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Register() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   };
   const schema = yup.object().shape({
-    fullName: yup.string().required("Name is required"),
-    email: yup.string().email().required("Email is required"),
-    age: yup
-      .number("ContactNumber must be a number")
-      .positive("ContactNumber must be a positive number")
-      .required("ContactNumber is required"),
-      password: yup.string().min(4, "Password must be at least 4 characters long").required("Password is required"),
+    Name: yup.string().required("Name is required"),
+    Email: yup.string().email().required("Email is required"),
+    ContactNumber: yup.string().required("ContactNumber must be a number"),
+    Password: yup.string().min(4, "Password must be at least 4 characters long").required("Password is required"),
   });
 
   const { register, handleSubmit, formState: { errors } } = useForm({
@@ -27,7 +27,14 @@ function Register() {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
+    axios.post("http://localhost:8081/auth/register", data)
+    .then((response) => {
+      response.data.message && alert(response.data.message)
+      navigate("/login");
+    })
+    .catch(({response}) => {
+      alert(response.data.error)
+    });
   };
 
   return (
@@ -48,13 +55,13 @@ function Register() {
           <input
             type="text"
             placeholder="Email"
-            {...register("email")}
+            {...register("Email")}
           />
           <p className="error-message">{errors.email?.message}</p>
         </div>
 
         <div className="form-group1">
-          <input type="text" placeholder="ContactNumber" {...register("contactNumber")} />
+          <input type="text" placeholder="ContactNumber" {...register("ContactNumber")} />
           <p className="error-message">{errors.contactNumber?.message}</p>
         </div>
 
@@ -62,7 +69,7 @@ function Register() {
                   <input
                       type={showPassword ? "text" : "password"} // Updated type attribute
                       placeholder="Password"
-                      {...register("password")}
+                      {...register("Password")}
                   />
                   {showPassword ? (
                       <FaEyeSlash className="password-toggle" onClick={togglePasswordVisibility} />
@@ -73,7 +80,7 @@ function Register() {
               </div>
 
 
-        <input type="submit" value="Submit" className="submit-btn" />
+        <input type="submit" value="Register" className="submit-btn" />
         <div className="login-button-container">
         <p>Already have an account?</p>
         <Link to="/login" className="login-button">Login</Link>
