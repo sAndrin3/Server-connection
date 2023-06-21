@@ -1,4 +1,5 @@
 import "./Hero.css";
+import { Link } from "react-router-dom";
 
 function Hero(props) {
 
@@ -12,11 +13,11 @@ function Hero(props) {
         <div className="hero-text">
             <h1>{props.title}</h1>
             <p>{props.text}</p>
-            <a href={props.url}
+            <Link to="/travelplan"
             className={props.btnClass}>
               {props.buttonText}
-              </a>
-        </div>
+              </Link>
+             </div>
       </div>
       </>
     )

@@ -2,6 +2,10 @@
     width: 100%;
     height: calc(100vh - 0.01rem);
     position: relative;
+    background-image: linear-gradient(to right bottom, rgba(0,0,0,0.7), rgba(255,255,255,.2)), url(../assets/url.jpg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
 }
 
 .hero-mid{

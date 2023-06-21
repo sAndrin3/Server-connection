@@ -10,6 +10,7 @@ import Service from "./routes/Service";
 import Contact from "./routes/Contact";
 import Register from './routes/Register';
 import TravelPlan from './routes/TravelPlan';
+import Login from "./routes/Login"
 
 function App() {
   
@@ -25,6 +26,7 @@ function App() {
           <Route path="/contact" element={<Contact/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/travelplan" element={<TravelPlan/>}/>
+          <Route path="/login" element={<Login/>} />
         </Routes>
         </BrowserRouter>
     </div>

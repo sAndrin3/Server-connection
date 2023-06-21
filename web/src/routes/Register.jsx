@@ -1,27 +1,30 @@
 import Navbar from "../components/Navbar.jsx";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
 import "./Register.css"
+import {FaEye, FaEyeSlash} from "react-icons/fa"
 
 function Register() {
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  };
   const schema = yup.object().shape({
-    fullName: yup.string().required("Full name is required"),
+    fullName: yup.string().required("Name is required"),
     email: yup.string().email().required("Email is required"),
     age: yup
-      .number("Age must be a number")
-      .positive("Age must be a positive number")
-      .required("Age is required"),
+      .number("ContactNumber must be a number")
+      .positive("ContactNumber must be a positive number")
+      .required("ContactNumber is required"),
     password: yup
       .string()
       .matches(
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{4,}$/,
         'password must contain at least 4 characters, uppercase, lowercase, number, and one special case character'
       )
-      .required("Password is required"),
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref("password"), null], "Passwords must match"),
   });
 
   const { register, handleSubmit, formState: { errors } } = useForm({
@@ -33,54 +36,55 @@ function Register() {
   };
 
   return (
-    <>
+    <div className="register">
       <Navbar />
 
       <form onSubmit={handleSubmit(onSubmit)} className="form-container1">
-        <div className="form-group">
+        <div className="form-group1">
           <input
             type="text"
-            placeholder="Full name"
-            {...register("fullName")}
+            placeholder="Name"
+            {...register("Name")}
           />
-          <p className="error-message">{errors.fullName?.message}</p>
+          <p className="error-message">{errors.Name?.message}</p>
         </div>
 
         <div className="form-group1">
           <input
             type="text"
-            placeholder="Email..."
+            placeholder="Email"
             {...register("email")}
           />
           <p className="error-message">{errors.email?.message}</p>
         </div>
 
         <div className="form-group1">
-          <input type="number" placeholder="Age..." {...register("age")} />
-          <p className="error-message">{errors.age?.message}</p>
+          <input type="text" placeholder="ContactNumber" {...register("contactNumber")} />
+          <p className="error-message">{errors.contactNumber?.message}</p>
         </div>
 
         <div className="form-group1">
-          <input
-            type="password"
-            placeholder="Password..."
-            {...register("password")}
-          />
-          <p className="error-message">{errors.password?.message}</p>
-        </div>
+                  <input
+                      type={showPassword ? "text" : "password"} // Updated type attribute
+                      placeholder="Password"
+                      {...register("password")}
+                  />
+                  {showPassword ? (
+                      <FaEyeSlash className="password-toggle" onClick={togglePasswordVisibility} />
+                  ) : (
+                      <FaEye className="password-toggle" onClick={togglePasswordVisibility} /> // Updated icon for show password
+                  )}
+                  <p className="error-message">{errors.password?.message}</p>
+              </div>
 
-        <div className="form-group1">
-          <input
-            type="password"
-            placeholder="Confirm Password..."
-            {...register("confirmPassword")}
-          />
-          <p className="error-message">{errors.confirmPassword?.message}</p>
-        </div>
 
         <input type="submit" value="Submit" className="submit-btn" />
+        <div className="login-button-container">
+        <p>Already have an account?</p>
+        <Link to="/login" className="login-button">Login</Link>
+      </div>
       </form>
-    </>
+    </div>
   );
 }
 
