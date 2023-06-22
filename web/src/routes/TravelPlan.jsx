@@ -10,8 +10,6 @@ function TravelPlan() {
       <p>{USER.Name}</p>
       <h2>Email</h2>
       <p>{USER.Email}</p>
-      <h2>User-id</h2>
-      {/* <p>{USER.user-id}</p> */}
       p
     </div>
   )
