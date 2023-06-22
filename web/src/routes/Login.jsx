@@ -7,8 +7,11 @@ import "./Login.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "../context/userContext/Context.jsx";
 
 function Login() {
+  const {user, dispatch} = useContext(Context)
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
@@ -29,6 +32,8 @@ function Login() {
     axios.post("http://localhost:8081/auth/login", data)
     .then(({data}) => {
       if(data.token){
+        // dispatch({type: "Login_Successful", payload:data})
+        localStorage.setItem("user", JSON.stringify(data))
         navigate("/")
       }
     })
@@ -36,6 +41,7 @@ function Login() {
       alert(response.data.error)
     });
   }
+  console.log(user);
 
   return (
     <div className="login">

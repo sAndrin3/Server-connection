@@ -1,8 +1,19 @@
-
+import { useContext } from "react"
+import { Context } from "../context/userContext/Context"
 
 function TravelPlan() {
+  let USER = JSON.parse(localStorage.getItem("user"))
+  console.log(USER)
   return (
-    <div>TravelPlan</div>
+    <div>
+      <h2>Name</h2>
+      <p>{USER.Name}</p>
+      <h2>Email</h2>
+      <p>{USER.Email}</p>
+      <h2>User-id</h2>
+      {/* <p>{USER.user-id}</p> */}
+      p
+    </div>
   )
 }
 
