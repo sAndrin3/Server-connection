@@ -28,6 +28,11 @@ export const MenuItems = [
         url: "/signup",
         cName: "nav-links-mobile",
     },
+    {
+        title: "log out",
+        url: "/logout",
+        cName: "nav-links-mobile",
+    }
 
 
 ]

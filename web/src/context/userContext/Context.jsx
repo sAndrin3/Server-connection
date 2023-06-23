@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer, useState } from "react";
 import Reducer from "./Reducer";
 
 //initial state
@@ -15,15 +15,15 @@ export const Context = createContext(INITIAL_STATE);
 
 export const ContextProvider = ({children}) => {
     const[state, dispatch] = useReducer(Reducer, INITIAL_STATE);
-    let USER 
+    const [USER, setUSER] = useState('')
     
     useEffect(()=>{
-        USER = localStorage.getItem("user")
+        setUSER(JSON.parse(localStorage.getItem("user")))
 
     }, [])
 
     return (
-        <Context.Provider value={{user: state.user, dispatch, USER}}>
+        <Context.Provider value={{user: state.user, dispatch, USER, setUSER}}>
             {children}
         </Context.Provider>
     )

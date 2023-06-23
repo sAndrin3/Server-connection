@@ -41,21 +41,34 @@ export const register = async (req, res) => {
     }
 };
 
-export const login = async(req, res) => {
-    const { Name , Password} = req.body;
+export const login = async (req, res) => {
+    const { Name, Password } = req.body;
     let pool = await sql.connect(config.sql);
-    const result = await pool.request()
+    try {
+      const result = await pool
+        .request()
         .input('Name', sql.VarChar, Name)
         .query('SELECT * FROM Users WHERE Name = @Name');
-    const user = result.recordset[0];
-    if (!user) {
+      const user = result.recordset[0];
+      if (!user) {
         res.status(401).json({ error: 'Invalid Name or Password' });
-    } else {
+      } else {
         if (!bcrypt.compareSync(Password, user.Password)) {
-            res.status(401).json(error.message);
+          res.status(401).json({ error: 'Invalid Name or Password' });
         } else {
-            const token = `JWT ${jwt.sign({ Name: user.Name, Email: user.Email}, config.jwt_secret)}`;
-            res.status(200).json({Email: user.Email, Name: user.Name, id: user.id, token: token});
+          const token = `JWT ${jwt.sign(
+            { Name: user.Name, Email: user.Email },
+            config.jwt_secret
+          )}`;
+          res
+            .status(200)
+            .json({ Email: user.Email, Name: user.Name, id: user.id, token: token });
         }
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    } finally {
+      sql.close();
     }
-};
+  };
+ 
