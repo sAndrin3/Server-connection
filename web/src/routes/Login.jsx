@@ -11,7 +11,7 @@ import { useContext } from "react";
 import { Context } from "../context/userContext/Context.jsx";
 
 function Login() {
-  const {user, dispatch} = useContext(Context)
+  const {user, admin, dispatch} = useContext(Context)
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
@@ -29,19 +29,39 @@ function Login() {
   });
 
   const onSubmit = (data) => {
-    axios.post("http://localhost:8081/auth/login", data)
-    .then(({data}) => {
-      if(data.token){
-        // dispatch({type: "Login_Successful", payload:data})
-        localStorage.setItem("user", JSON.stringify(data))
-        navigate("/")
-      }
-    })
-    .catch(({response}) => {
-      alert(response.data.error)
-    });
-  }
-  console.log(user);
+    // if (data.isAdmin) {
+      if (data){
+      axios.post("http://localhost:8081/auth/loginAdmin", data)
+     .then(({ data }) => {
+          if (data.token) {
+            localStorage.setItem("admin", JSON.stringify(data));
+            // localStorage.setItem("isAdmin", true);
+            navigate("/");
+          }
+        })
+        .catch(({ response }) => {
+          alert("wrong credentials");
+        });
+
+        
+    }
+    if (data)
+    {
+      axios.post("http://localhost:8081/auth/login", data)
+        .then(({ data }) => {
+          if (data.token) {
+            localStorage.setItem("user", JSON.stringify(data));
+            alert("login successful")
+            navigate("/");
+          }
+        })
+        .catch(({ response }) => {
+          alert(response.data.error);
+        });
+    }
+  };
+  
+  console.log(admin);
 
   return (
     <div className="login">
