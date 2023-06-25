@@ -29,18 +29,22 @@ const user = JSON.parse(localStorage.getItem("user"))
         ))}
       </ul>
       {!user && (
-        <Link to="/register">
-          <button>Sign Up</button>
-        </Link>
-      )}
-      {user&& (
+  <Link to="/register">
+    <button>Sign Up</button>
+  </Link>
+)}
+
+      {user && (
         <Link to="/login">
-          <button onClick={()=> {localStorage.clear()}}>Log Out</button>
+          <button onClick={() => { localStorage.clear() }}>Log Out</button>
         </Link>
       )}
-      {/* {  <Link to="/register">
-          <button oncli>{user ? "Logout": "Signup"}</button>
-        </Link>} */}
+
+      {user && isAdmin && (
+  <Link to="/admin/dashboard">Admin Dashboard</Link>
+)}
+
+      
     </nav>
   );
 };
