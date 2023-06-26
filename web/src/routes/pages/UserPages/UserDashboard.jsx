@@ -12,14 +12,14 @@ const Sidebar = () => {
           <MenuItem component={<Link to = "profile"/>}>User Profile</MenuItem>
           <SubMenu title="Tours" label='Tours'>
             
-            <MenuItem component={<Link to = "viewtours"/>}>View Tours</MenuItem>
+            <MenuItem component={<Link to = "tours"/>}>Tours</MenuItem>
     
           </SubMenu>
           <MenuItem component={<Link to = "message"/>}>Message</MenuItem>
           <MenuItem component={<Link to = "book"/>}>Book</MenuItem>
         </Menu>
       </div>
-      <div className="content">
+      <div className="content1">
         {/* Content for each section goes here */}
       </div>
     </div>

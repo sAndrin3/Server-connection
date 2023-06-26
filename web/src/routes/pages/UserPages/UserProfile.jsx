@@ -27,9 +27,9 @@ function UserProfile() {
   }
 
   return (
-    <div className='ap'>
+    <div className='up'>
          <div className="user-profile2">
-      {adminInfo ? (
+      {UserInfo ? (
         <>
           <h2>Admin Profile</h2>
           <div className="user-profile__info">

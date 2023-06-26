@@ -16,9 +16,9 @@ import Bookings from './routes/pages/AdminPages/Bookings'
 import Messages from './routes/pages/AdminPages/Messages';
 import Navbar from './components/Navbar'
 import UserProfile from './routes/pages/UserPages/UserProfile';
-// import ViewTours from './routes/pages/UserPages/ViewTours';
-// import Book from './routes/pages/UserPages/Book'
-// import Message from './routes/pages/UserPages/Message';
+import Tours from './routes/pages/UserPages/Tours';
+import Book from './routes/pages/UserPages/Book'
+import Message from './routes/pages/UserPages/Message';
 
 function App() {
   let USER = JSON.parse(localStorage.getItem("user"))
@@ -37,7 +37,7 @@ function App() {
           <Route path="/login" element={<Login/>} />
           <Route path="/user" element={<UserDashboard/>}>
               <Route path="profile" element={<UserProfile/>}/>
-             <Route path="viewtours" element={<ViewTours/>}/>
+             <Route path="tours" element={<Tours/>}/>
              <Route path="message" element={<Message/>}/>
              <Route path="book" element={<Book/>}/>
           </Route>
