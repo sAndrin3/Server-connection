@@ -1,11 +1,4 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import { useContext } from "react"
-import { Context } from "./context/userContext/Context"
-
-
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Home from "./routes/Home";
 import About from "./routes/About";
@@ -17,8 +10,15 @@ import Login from "./routes/Login"
 import AdminDashboard from './routes/pages/AdminPages/AdminDashboard'
 import UserDashboard from './routes/pages/UserPages/UserDashboard'
 import AdminProfile from './routes/pages/AdminPages/AdminProfile'
+import ViewTours from './routes/pages/AdminPages/ViewTours'
+import CreateTours from './routes/pages/AdminPages/CreateTours'
+import Bookings from './routes/pages/AdminPages/Bookings'
+import Messages from './routes/pages/AdminPages/Messages';
 import Navbar from './components/Navbar'
-import Footer from './components/Footer'
+import UserProfile from './routes/pages/UserPages/UserProfile';
+// import ViewTours from './routes/pages/UserPages/ViewTours';
+// import Book from './routes/pages/UserPages/Book'
+// import Message from './routes/pages/UserPages/Message';
 
 function App() {
   let USER = JSON.parse(localStorage.getItem("user"))
@@ -35,9 +35,18 @@ function App() {
           <Route path="/register" element={<Register/>}/>
           <Route path="/travelplan" element={USER ? <TravelPlan/> : Home}/>
           <Route path="/login" element={<Login/>} />
-          <Route path="/user" element={<UserDashboard/>} />
+          <Route path="/user" element={<UserDashboard/>}>
+              <Route path="profile" element={<UserProfile/>}/>
+             <Route path="viewtours" element={<ViewTours/>}/>
+             <Route path="message" element={<Message/>}/>
+             <Route path="book" element={<Book/>}/>
+          </Route>
           <Route path="/admin" element={<AdminDashboard/>}>
              <Route path="profile" element={<AdminProfile/>}/>
+             <Route path="viewtours" element={<ViewTours/>}/>
+             <Route path="createtours" element={<CreateTours/>}/>
+             <Route path="bookings" element={<Bookings/>}/>
+             <Route path="messages" element={<Messages/>}/>
           </Route>
           
         </Routes>

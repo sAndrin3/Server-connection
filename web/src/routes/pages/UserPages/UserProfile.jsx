@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './AdminProfile.css';
+import './UserProfile.css';
 
-function AdminProfile() {
-  const [adminInfo, setAdminInfo] = useState(null);
+function UserProfile() {
+  const [UserInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch admin profile data from the database
-    fetchAdminProfile();
+    fetchUserProfile();
   }, []);
 
-  const fetchAdminProfile = async () => {
+  const fetchUserProfile = async () => {
     try {
-      const response = await axios.get('/api/admin/profile');
-      setAdminInfo(response.data);
+      const response = await axios.get('/api/user/profile');
+      setUserInfo(response.data);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching admin profile:', error);
+      console.error('Error fetching user profile:', error);
       setLoading(false);
     }
   };
@@ -28,13 +28,13 @@ function AdminProfile() {
 
   return (
     <div className='ap'>
-         <div className="admin-profile2">
+         <div className="user-profile2">
       {adminInfo ? (
         <>
           <h2>Admin Profile</h2>
-          <div className="admin-profile__info">
+          <div className="user-profile__info">
             <div>
-              <strong>Admin ID:</strong> {adminInfo.adminId}
+              <strong>User ID:</strong> {adminInfo.adminId}
             </div>
             <div>
               <strong>Name:</strong> {adminInfo.name}
@@ -53,4 +53,4 @@ function AdminProfile() {
   );
 }
 
-export default AdminProfile;
+export default UserProfile;

@@ -12,11 +12,11 @@ const Sidebar = () => {
           <MenuItem component={<Link to = "profile"/>}>Admin Profile</MenuItem>
           <SubMenu title="Tours" label='Tours'>
             
-            <MenuItem>View Tours</MenuItem>
-            <MenuItem>Create Tour</MenuItem>
+            <MenuItem component={<Link to = "viewtours"/>}>View Tours</MenuItem>
+            <MenuItem component={<Link to = "createtours"/>}>Create Tour</MenuItem>
           </SubMenu>
-          <MenuItem>Messages</MenuItem>
-          <MenuItem>Bookings</MenuItem>
+          <MenuItem component={<Link to = "messages"/>}>Messages</MenuItem>
+          <MenuItem component={<Link to = "bookings"/>}>Bookings</MenuItem>
         </Menu>
       </div>
       <div className="content">
