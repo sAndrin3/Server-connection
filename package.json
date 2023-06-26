@@ -4,6 +4,7 @@
     "axios": "^1.4.0",
     "react-hook-form": "^7.45.0",
     "react-icons": "^4.9.0",
+    "react-pro-sidebar": "^1.1.0-alpha.1",
     "yup": "^1.2.0"
   }
 }

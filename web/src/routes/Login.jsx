@@ -2,16 +2,15 @@ import Navbar from "../components/Navbar.jsx";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import "./Login.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
 import { Context } from "../context/userContext/Context.jsx";
 
 function Login() {
-  const {user, admin, dispatch} = useContext(Context)
+  const { user, admin, dispatch } = useContext(Context);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
@@ -20,39 +19,39 @@ function Login() {
 
   const schema = yup.object().shape({
     Name: yup.string().required("Name is required"),
-    Password: yup.string().min(4, "Password must be at least 4 characters long").required("Password is required"),
+    Password: yup
+      .string()
+      .min(4, "Password must be at least 4 characters long")
+      .required("Password is required"),
   });
-  
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   });
 
   const onSubmit = (data) => {
-    // if (data.isAdmin) {
-      if (data){
-      axios.post("http://localhost:8081/auth/loginAdmin", data)
-     .then(({ data }) => {
+    if (data) {
+      axios
+        .post("http://localhost:8081/auth/loginAdmin", data)
+        .then(({ data }) => {
           if (data.token) {
             localStorage.setItem("admin", JSON.stringify(data));
-            // localStorage.setItem("isAdmin", true);
-            navigate("/");
+            navigate("/admin"); // Route to admin dashboard
           }
         })
         .catch(({ response }) => {
-          alert("wrong credentials");
+          alert("Wrong credentials");
         });
-
-        
     }
-    if (data)
-    {
-      axios.post("http://localhost:8081/auth/login", data)
+
+    if (data) {
+      axios
+        .post("http://localhost:8081/auth/login", data)
         .then(({ data }) => {
           if (data.token) {
             localStorage.setItem("user", JSON.stringify(data));
-            alert("login successful")
-            navigate("/");
+            alert("Login successful");
+            navigate("/user"); // Route to user dashboard
           }
         })
         .catch(({ response }) => {
@@ -60,8 +59,6 @@ function Login() {
         });
     }
   };
-  
-  console.log(admin);
 
   return (
     <div className="login">

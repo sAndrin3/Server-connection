@@ -14,6 +14,11 @@ import Contact from "./routes/Contact";
 import Register from './routes/Register';
 import TravelPlan from './routes/TravelPlan';
 import Login from "./routes/Login"
+import AdminDashboard from './routes/pages/AdminPages/AdminDashboard'
+import UserDashboard from './routes/pages/UserPages/UserDashboard'
+import AdminProfile from './routes/pages/AdminPages/AdminProfile'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 
 function App() {
   let USER = JSON.parse(localStorage.getItem("user"))
@@ -21,7 +26,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        
+        <Navbar/>
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/about" element={<About/>}/>
@@ -30,7 +35,13 @@ function App() {
           <Route path="/register" element={<Register/>}/>
           <Route path="/travelplan" element={USER ? <TravelPlan/> : Home}/>
           <Route path="/login" element={<Login/>} />
+          <Route path="/user" element={<UserDashboard/>} />
+          <Route path="/admin" element={<AdminDashboard/>}>
+             <Route path="profile" element={<AdminProfile/>}/>
+          </Route>
+          
         </Routes>
+        {/* <Footer/> */}
         </BrowserRouter>
     </div>
   );

@@ -1,13 +1,15 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import "./Navbar.css";
 import { MenuItems } from "./MenuItems";
 import { Link } from "react-router-dom";
-import { Context } from "../context/userContext/Context";
+
+
 
 const Navbar = () => {
   const [clicked, setClicked] = useState(false);
-//   const { user } = useContext(Context);
-const user = JSON.parse(localStorage.getItem("user"))
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user && user.isAdmin;
+
   const handleClick = () => {
     setClicked(!clicked);
   };
@@ -28,23 +30,27 @@ const user = JSON.parse(localStorage.getItem("user"))
           </li>
         ))}
       </ul>
+
       {!user && (
   <Link to="/register">
     <button>Sign Up</button>
   </Link>
 )}
 
-      {user && (
-        <Link to="/login">
-          <button onClick={() => { localStorage.clear() }}>Log Out</button>
-        </Link>
-      )}
-
-      {user && isAdmin && (
-  <Link to="/admin/dashboard">Admin Dashboard</Link>
+{user && !user.isAdmin && (
+  <Link to="/login">
+    <button onClick={() => { localStorage.clear() }}>Log Out</button>
+  </Link>
 )}
 
-      
+{user && user.isAdmin && (
+  <Link to="/admin/dashboard">
+    <button onClick={() => { localStorage.clear() }}>Admin Log Out</button>
+  </Link>
+)}
+
+
+
     </nav>
   );
 };
