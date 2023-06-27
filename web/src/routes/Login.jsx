@@ -36,7 +36,7 @@ function Login() {
         .then(({ data }) => {
           if (data.token) {
             localStorage.setItem("admin", JSON.stringify(data));
-            navigate("/admin"); // Route to admin dashboard
+            navigate("/admin/profile"); // Route to admin dashboard
           }
         })
         .catch(({ response }) => {
@@ -49,7 +49,7 @@ function Login() {
         .post("http://localhost:8081/auth/login", data)
         .then(({ data }) => {
           if (data.token) {
-            localStorage.setItem("user", JSON.stringify(data));
+            localStorage.setItem("user/profile", JSON.stringify(data));
             alert("Login successful");
             navigate("/user"); // Route to user dashboard
           }

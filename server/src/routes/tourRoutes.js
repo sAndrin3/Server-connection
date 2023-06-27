@@ -1,6 +1,6 @@
 import { getUsers, getUser, createUser, updateUser, deleteUser } from "../controllers/toursController.js";
 import { login, register, loginRequired, registerAdmin, adminLogin} from '../controllers/userController.js';
-import { getAdmins, getAdmin, createAdmin, updateAdmin, deleteAdmin } from "../controllers/toursController.js";
+import { getAdmins, getAdmin, createAdmin, updateAdmin, deleteAdmin, getTours, getTour, createTour, updateTour, deleteTour,} from "../controllers/toursController.js";
 
 
 export const userRoutes = (app) => {
@@ -34,4 +34,13 @@ export const userRoutes = (app) => {
 
     app.route('/auth/loginAdmin')
         .post(adminLogin);
+
+    app.route('/tours')
+        .get(getTours)
+        .post(loginRequired, createTour);
+    
+    app.route('/tour/:id')
+        .get( getTour)
+        .put(loginRequired, updateTour)
+        .delete(loginRequired, deleteTour);
 };

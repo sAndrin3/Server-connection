@@ -1,6 +1,7 @@
 import sql from 'mssql';
 import config from '../db/config.js';
 
+
 // User functions
 
 export const getUsers = async (req, res) => {
@@ -162,3 +163,114 @@ export const deleteAdmin = async (req, res) => {
     sql.close();
   }
 };
+
+
+export const getTours = async (req, res) => {
+  try {
+    let pool = await sql.connect(config.sql);
+    const result = await pool.request().query("SELECT * FROM Tour");
+
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ message: 'Tours not found' });
+    }
+
+    res.status(200).json({ success: true, tours: result.recordset });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while retrieving tours' });
+  } finally {
+    sql.close();
+  }
+};
+
+export const getTour = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let pool = await sql.connect(config.sql);
+    const request = pool.request();
+    request.input('id', sql.Int, id);
+    const result = await request.query('SELECT * FROM Tour WHERE id = @id');
+
+    if (result.recordset.length === 0) {
+      return res.status(404).json(error.message);
+    }
+
+    res.status(200).json({ success: true, tour: result.recordset[0] });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while retrieving the tour' });
+  } finally {
+    sql.close();
+  }
+};
+
+
+// Create a new tour
+export const createTour = async (req, res) => {
+  try {
+    const { title, description, duration, price } = req.body;
+    let pool = await sql.connect(config.sql);
+    await pool
+      .request()
+      .input("Title", sql.VarChar, title)
+      .input("Description", sql.VarChar, description)
+      .input("Duration", sql.Int, duration)
+      .input("Price", sql.Float, price)
+      .query("INSERT INTO Tour (Title, Description, Duration, Price) VALUES (@Title, @Description, @Duration, @Price)");
+    res.status(201).json({ success: true, message: 'Tour created successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'An error occurred while creating the tour' });
+  } finally {
+    sql.close();
+  }
+};
+
+// Update an existing tour
+export const updateTour = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, duration, price } = req.body;
+    
+    let pool = await sql.connect(config.sql);
+    const result = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .input("Title", sql.VarChar, title)
+      .input("Description", sql.VarChar, description)
+      .input("Duration", sql.Int, duration)
+      .input("Price", sql.Float, price)
+      .query("UPDATE Tour SET Title = @Title, Description = @Description, Duration = @Duration, Price = @Price WHERE id = @id");
+
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ success: false, error: 'Tour not found' });
+    }
+    
+    res.json({ success: true, message: 'Tour updated successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'An error occurred while updating the tour' });
+  } finally {
+    sql.close();
+  }
+};
+
+// Delete a tour
+export const deleteTour = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    let pool = await sql.connect(config.sql);
+    const result = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .query("DELETE FROM Tour WHERE id = @id");
+
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ success: false, error: 'Tour not found' });
+    }
+
+    res.json({ success: true, message: 'Tour deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'An error occurred while deleting the tour' });
+  } finally {
+    sql.close();
+  }
+};
+
