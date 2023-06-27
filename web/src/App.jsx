@@ -43,6 +43,7 @@ function App() {
           </Route>
           <Route path="/admin" element={<AdminDashboard/>}>
              <Route path="profile" element={<AdminProfile/>}/>
+             <Route path="/admin/createtours/:tourId" element={<CreateTours />} />
              <Route path="viewtours" element={<ViewTours/>}/>
              <Route path="createtours" element={<CreateTours/>}/>
              <Route path="bookings" element={<Bookings/>}/>

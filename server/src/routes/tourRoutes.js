@@ -41,6 +41,6 @@ export const userRoutes = (app) => {
     
     app.route('/tour/:id')
         .get( getTour)
-        .put(loginRequired, updateTour)
+        .put( updateTour)
         .delete( deleteTour);
 };
