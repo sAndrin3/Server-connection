@@ -37,10 +37,10 @@ export const userRoutes = (app) => {
 
     app.route('/tours')
         .get(getTours)
-        .post(loginRequired, createTour);
+        .post( createTour);
     
     app.route('/tour/:id')
         .get( getTour)
         .put(loginRequired, updateTour)
-        .delete(loginRequired, deleteTour);
+        .delete( deleteTour);
 };

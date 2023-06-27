@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import './CreateTours.css';
+import axios from 'axios';
 
 function CreateTours() {
   const [tourData, setTourData] = useState({
@@ -16,39 +17,36 @@ function CreateTours() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    try {
-      const response = await fetch('/api/tours', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(tourData),
-      });
-
-      if (response.ok) {
-        // Tour successfully created in the database
-        console.log('Tour created');
-        // Reset the form
-        setTourData({
-          title: '',
-          description: '',
-          duration: '',
-          price: '',
-        });
-      } else {
-        // Error creating the tour
-        console.log('Error creating tour');
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+    
+      try {
+        const response = await axios.post('http://localhost:8081/tours', tourData);
+  
+        if (response.status === 201) {
+          // Tour successfully created in the database
+          console.log('Tour created:', response.data);
+          // Reset the form
+          setTourData({
+            title: '',
+            description: '',
+            duration: '',
+            price: '',
+          });
+        } else {
+          // Error creating the tour
+          console.log('Error creating tour:', response.data);
+        }
+      } catch (error) {
+        console.log('Error creating tour:', error);
       }
-    } catch (error) {
-      console.log('Error creating tour:', error);
-    }
-  };
+    };
+  
+    
 
   return (
-    <div className='ap'>
+    <div className="ap">
       <div className="create-tours">
         <h2 className="create-tours__heading">Create Tour</h2>
         <form className="create-tours__form" onSubmit={handleSubmit}>
@@ -95,7 +93,9 @@ function CreateTours() {
               required
             />
           </div>
-          <button type="submit" className="create-tours__button">Create Tour</button>
+          <button type="submit" className="create-tours__button">
+            Create Tour
+          </button>
         </form>
       </div>
     </div>

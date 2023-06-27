@@ -212,12 +212,12 @@ export const createTour = async (req, res) => {
       .request()
       .input("Title", sql.VarChar, title)
       .input("Description", sql.VarChar, description)
-      .input("Duration", sql.Int, duration)
+      .input("Duration", sql.VarChar, duration)
       .input("Price", sql.Float, price)
       .query("INSERT INTO Tour (Title, Description, Duration, Price) VALUES (@Title, @Description, @Duration, @Price)");
-    res.status(201).json({ success: true, message: 'Tour created successfully' });
+    res.status(201).json({ message: 'Tour created successfully' });
   } catch (error) {
-    res.status(500).json({ success: false, error: 'An error occurred while creating the tour' });
+    res.status(500).json(error.message);
   } finally {
     sql.close();
   }
