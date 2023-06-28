@@ -20,7 +20,8 @@ import {
     getTour,
     createTour,
     updateTour,
-    deleteTour
+    deleteTour,
+    testTour
   } from "../controllers/toursController.js";
   
   import {
@@ -78,6 +79,7 @@ export const userRoutes = (app) => {
     
     app.route('/tour/:id')
         .get( getTour)
+        .post(testTour)
         .put( updateTour)
         .delete( deleteTour);
 

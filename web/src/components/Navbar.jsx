@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   const [clicked, setClicked] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
+  const admin = JSON.parse(localStorage.getItem("admin"));
   const isAdmin = user && user.isAdmin;
 
   const handleClick = () => {
@@ -31,23 +32,37 @@ const Navbar = () => {
         ))}
       </ul>
 
-      {!user && (
+      {/* {!user && (
   <Link to="/register">
     <button>Sign Up</button>
   </Link>
-)}
+)} */}
 
-{user && !user.isAdmin && (
+{user &&  (
   <Link to="/login">
     <button onClick={() => { localStorage.clear() }}>Log Out</button>
   </Link>
 )}
 
-{user && user.isAdmin && (
-  <Link to="/admin/dashboard">
-    <button onClick={() => { localStorage.clear() }}>Admin Log Out</button>
+{admin ? (
+  <Link to="/login">
+    <button onClick={() => { localStorage.clear() }}>Log Out</button>
   </Link>
-)}
+):
+user?
+(
+  <Link to="/login">
+  <button onClick={() => { localStorage.clear() }}>Log Out</button>
+</Link>
+):(
+  <Link to="/register">
+    <button>Sign Up</button>
+  </Link>
+
+)
+}
+
+
 
 
 

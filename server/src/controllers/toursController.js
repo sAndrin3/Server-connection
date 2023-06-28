@@ -223,22 +223,29 @@ export const createTour = async (req, res) => {
   }
 };
 
+export const testTour = async(req,res)=>{
+  console.log('working fine')
+}
+
 // Update an existing tour
 export const updateTour = async (req, res) => {
+  // console.log(req.body)
+  // console.log('updates');
+  // res.status(200).json({message:"update"});
   try {
     const { id } = req.params;
     const { title, description, duration, price } = req.body;
-    
+    console.log(title, description, duration, price );
     let pool = await sql.connect(config.sql);
+    console.log(pool);
     const result = await pool
       .request()
-      .input("id", sql.Int, id)
       .input("Title", sql.VarChar, title)
       .input("Description", sql.VarChar, description)
       .input("Duration", sql.Int, duration)
       .input("Price", sql.Float, price)
       .query("UPDATE Tour SET Title = @Title, Description = @Description, Duration = @Duration, Price = @Price WHERE id = @id");
-
+console.log(result);
     if (result.rowsAffected[0] === 0) {
       return res.status(404).json({ success: false, error: 'Tour not found' });
     }

@@ -51,7 +51,7 @@ function Login() {
           if (data.token) {
             localStorage.setItem("user/profile", JSON.stringify(data));
             alert("Login successful");
-            navigate("/user"); // Route to user dashboard
+            navigate("/user/profile"); // Route to user dashboard
           }
         })
         .catch(({ response }) => {

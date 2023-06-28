@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './CreateTours.css';
+import { useLocation } from 'react-router-dom';
 
 function CreateTours() {
+  const location = useLocation()
+const [tours,setTours] = useState([]);
   const { tourId } = useParams();
   const navigate = useNavigate();
 
@@ -13,14 +16,29 @@ function CreateTours() {
     duration: '',
     price: ''
   });
-
+  let pathname = location.pathname.split('/')[3]
+  console.log(pathname);
+  console.log(tours)
+  const tour = tours.find((tour)=>tour.id == pathname)
+console.log(tour);
   useEffect(() => {
+    getaData();
     if (tourId) {
       // Fetch the tour details if tourId exists
       fetchTourDetails();
     }
   }, [tourId]);
 
+ 
+    const getaData = async()=>{
+      const res = await fetch('http://localhost:8081/tours');
+      const data = await res.json();
+      setTours(data.tours);
+
+    }
+    // console.log(tours)
+
+// console.log(tourData)
   const fetchTourDetails = async () => {
     try {
       const response = await axios.get(`http://localhost:8081/tours/${tourId}`);
@@ -31,6 +49,7 @@ function CreateTours() {
         duration: tour.duration,
         price: tour.price
       });
+      console.log(tour)
     } catch (error) {
       console.log('Error fetching tour details:', error);
     }
@@ -49,9 +68,20 @@ function CreateTours() {
 
     try {
       let response;
+      
       if (tourId) {
+        console.log(tourData);
         // Update an existing tour
-        response = await axios.put(`http://localhost:8081/tours/${tourId}`, tourData);
+        //response = await axios.put(`http://localhost:8081/tours/${tourId}`, tourData);
+        response = await fetch(`http://localhost:8081/tour/${tourId}`,{
+          method:"PUT",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify(tourData)
+        })
+        let data = await response.json();
+        console.log(data);
       } else {
         // Create a new tour
         response = await axios.post('http://localhost:8081/tours', tourData);
@@ -84,7 +114,7 @@ function CreateTours() {
               value={tourData.title}
               onChange={handleChange}
               className="create-tours__input"
-              required
+              placeholder={tour?.title}
             />
           </div>
           <div className="create-tours__form-group">
@@ -94,7 +124,7 @@ function CreateTours() {
               value={tourData.description}
               onChange={handleChange}
               className="create-tours__textarea"
-              required
+              placeholder={tour?.description}
             ></textarea>
           </div>
           <div className="create-tours__form-group">
@@ -105,7 +135,7 @@ function CreateTours() {
               value={tourData.duration}
               onChange={handleChange}
               className="create-tours__input"
-              required
+              placeholder={tour?.duration}
             />
           </div>
           <div className="create-tours__form-group">
@@ -115,8 +145,9 @@ function CreateTours() {
               name="price"
               value={tourData.price}
               onChange={handleChange}
+              placeholder={tour?.price}
               className="create-tours__input"
-              required
+            
             />
           </div>
           <button type="submit" className="create-tours__button">
