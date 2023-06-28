@@ -1,7 +1,44 @@
-import { getUsers, getUser, createUser, updateUser, deleteUser } from "../controllers/toursController.js";
 import { login, register, loginRequired, registerAdmin, adminLogin} from '../controllers/userController.js';
-import { getAdmins, getAdmin, createAdmin, updateAdmin, deleteAdmin, getTours, getTour, createTour, updateTour, deleteTour,} from "../controllers/toursController.js";
+import {
+    getUsers,
+    getUser,
+    createUser,
+    updateUser,
+    deleteUser
+  } from "../controllers/toursController.js";
+  
+  import {
+    getAdmins,
+    getAdmin,
+    createAdmin,
+    updateAdmin,
+    deleteAdmin
+  } from "../controllers/toursController.js";
+  
+  import {
+    getTours,
+    getTour,
+    createTour,
+    updateTour,
+    deleteTour
+  } from "../controllers/toursController.js";
+  
+  import {
+    getBookings,
+    getBooking,
+    createBooking,
+    updateBooking,
+    deleteBooking
+  } from "../controllers/toursController.js";
+  
+  import {
+    getMessages,
+    getMessage,
+    createMessage,
+    
+  } from "../controllers/toursController.js";
 
+  
 
 export const userRoutes = (app) => {
     app.route('/users')
@@ -43,4 +80,21 @@ export const userRoutes = (app) => {
         .get( getTour)
         .put( updateTour)
         .delete( deleteTour);
+
+    app.route('/bookings')
+        .get(getBookings)
+        .post(createBooking);
+
+    app.route('/booking/:id')
+        .get(getBooking)
+        .put(loginRequired, updateBooking)
+        .delete(loginRequired, deleteBooking);
+
+    app.route('/messages')
+        .get(getMessages)
+        .post(createMessage);
+    
+    app.route('/message/:id')
+        .get(getMessage)
+        
 };

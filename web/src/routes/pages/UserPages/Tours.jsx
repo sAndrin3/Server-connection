@@ -37,7 +37,7 @@ function Tours() {
         // Show an error message or perform any other actions in case of booking failure
       }
     } catch (error) {
-      console.log('Error creating booking:', error);
+      console.log('Error creating booking:', error.message);
     }
   };
 

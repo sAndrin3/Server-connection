@@ -23,7 +23,8 @@ function Bookings() {
   }
 
   return (
-    <div className="bookings">
+    <div className='ap'>
+      <div className="bookings">
       <h2>Bookings</h2>
       {bookings.length > 0 ? (
         <table>
@@ -32,7 +33,7 @@ function Bookings() {
               <th>ID</th>
               <th>User ID</th>
               <th>Tour ID</th>
-              <th>Date</th>
+              {/* <th>Date</th> */}
             </tr>
           </thead>
           <tbody>
@@ -41,7 +42,7 @@ function Bookings() {
                 <td>{booking.id}</td>
                 <td>{booking.userId}</td>
                 <td>{booking.tourId}</td>
-                <td>{booking.date}</td>
+                {/* <td>{booking.date}</td> */}
               </tr>
             ))}
           </tbody>
@@ -50,6 +51,8 @@ function Bookings() {
         <div>No bookings found.</div>
       )}
     </div>
+    </div>
+    
   );
 }
 

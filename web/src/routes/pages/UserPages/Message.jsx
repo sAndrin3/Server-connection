@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import './Message.css'
+import './Message.css';
 
 function Message({ adminId }) {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
 
-  // Fetch messages from the database
   useEffect(() => {
-    // Add logic to fetch messages for the current user from the database
-    // and update the 'messages' state
     const fetchMessages = async () => {
       try {
-        // Fetch messages for the current user
         const response = await fetch(`/api/messages?adminId=${adminId}`);
         const data = await response.json();
         setMessages(data.messages);
@@ -23,38 +19,56 @@ function Message({ adminId }) {
     fetchMessages();
   }, [adminId]);
 
-  const handleMessageSend = () => {
-    // Add logic to send the message to the admin and update the database
-    console.log(`Send message to admin with ID: ${adminId}`);
-    console.log(`Message content: ${message}`);
+  const handleMessageSend = async () => {
+    try {
+      const response = await fetch('/api/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          senderId: 1, // Replace with the actual user ID
+          receiverId: adminId,
+          messageText: message,
+        }),
+      });
 
-    // Clear the message input
-    setMessage('');
+      if (response.status === 201) {
+        console.log('Message sent successfully');
+        // Update the messages state by fetching the updated list of messages
+        fetchMessages();
+        // Clear the message input
+        setMessage('');
+      } else {
+        console.log('Error sending message');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   };
 
   return (
-    <div className='up'>
-         <div className="message-section">
-      <h2>Message Section</h2>
-      <div className="message-list">
-        {messages.map((message) => (
-          <div className="message-item" key={message.id}>
-            <p>{message.content}</p>
-            <span>{message.timestamp}</span>
-          </div>
-        ))}
-      </div>
-      <div className="message-input">
-        <textarea
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type your message..."
-        ></textarea>
-        <button onClick={handleMessageSend}>Send</button>
+    <div className="up">
+      <div className="message-section">
+        <h2>Message Section</h2>
+        <div className="message-list">
+          {messages.map((message) => (
+            <div className="message-item" key={message.MessageID}>
+              <p>{message.MessageText}</p>
+              <span>{message.SentDate}</span>
+            </div>
+          ))}
+        </div>
+        <div className="message-input">
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type your message..."
+          ></textarea>
+          <button onClick={handleMessageSend}>Send</button>
+        </div>
       </div>
     </div>
-    </div>
-   
   );
 }
 

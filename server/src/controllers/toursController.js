@@ -274,3 +274,193 @@ export const deleteTour = async (req, res) => {
   }
 };
 
+// ...
+
+// Booking functions
+
+export const getBookings = async (req, res) => {
+  try {
+    let pool = await sql.connect(config.sql);
+    const result = await pool.request().query("SELECT * FROM bookings");
+
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ message: 'Bookings not found' });
+    }
+
+    res.status(200).json({ success: true, bookings: result.recordset });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while retrieving bookings' });
+  } finally {
+    sql.close();
+  }
+};
+
+export const getBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let pool = await sql.connect(config.sql);
+    const request = pool.request();
+    request.input('id', sql.Int, id);
+    const result = await request.query('SELECT * FROM bookings WHERE id = @id');
+
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    res.status(200).json({ success: true, booking: result.recordset[0] });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while retrieving the booking' });
+  } finally {
+    sql.close();
+  }
+};
+
+export const createBooking = async (req, res) => {
+  try {
+    const { tourId, userId} = req.body;
+    let pool = await sql.connect(config.sql);
+    await pool
+      .request()
+      .input("TourId", sql.Int, tourId)
+      .input("UserId", sql.Int, userId)
+      // .input("BookingDate", sql.Date, bookingDate)
+      .query("INSERT INTO bookings (tour_id, user_id) VALUES (@TourId, @UserId)");
+    res.status(201).json({ message: 'Booking created successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while creating the booking' });
+  } finally {
+    sql.close();
+  }
+};
+
+export const updateBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { tourId, userId} = req.body;
+    
+    let pool = await sql.connect(config.sql);
+    const result = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .input("TourId", sql.Int, tourId)
+      .input("UserId", sql.Int, userId)
+      // .input("BookingDate", sql.Date, bookingDate)
+      .query("UPDATE bookings SET tour_id = @TourId, user_id = @UserId");
+
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ success: false, error: 'Booking not found' });
+    }
+    
+    res.json({ success: true, message: 'Booking updated successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'An error occurred while updating the booking' });
+  } finally {
+    sql.close();
+  }
+};
+
+export const deleteBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    let pool = await sql.connect(config.sql);
+    const result = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .query("DELETE FROM bookings WHERE id = @id");
+
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ success: false, error: 'Booking not found' });
+    }
+
+    res.json({ success: true, message: 'Booking deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'An error occurred while deleting the booking' });
+  } finally {
+    sql.close();
+  }
+};
+
+
+
+// Get messages for a specific admin
+export const getMessagesByAdminId = async (req, res) => {
+  const { adminId } = req.query;
+
+  try {
+    const messages = await Message.find({
+      $or: [{ senderId: adminId }, { receiverId: adminId }],
+    });
+    res.status(200).json({ messages });
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.status(500).json({ error: 'Error fetching messages' });
+  }
+};
+
+// Get messages based on criteria
+export const getMessages = async (req, res) => {
+  const { senderId, receiverId } = req.query;
+  const query = {};
+
+  if (senderId) {
+    query.senderId = senderId;
+  }
+
+  if (receiverId) {
+    query.receiverId = receiverId;
+  }
+
+  try {
+    const messages = await Message.find(query);
+
+    res.status(200).json({ messages });
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.status(500).json(error.message);
+  }
+};
+
+
+// Get a single message by ID
+export const getMessage = async (req, res) => {
+  const { messageId } = req.params;
+
+  try {
+    const message = await Message.findById(messageId);
+    
+    if (!message) {
+      return res.status(404).json({ error: 'Message not found' });
+    }
+
+    res.status(200).json({ message });
+  } catch (error) {
+    console.error('Error fetching message:', error);
+    res.status(500).json({ error: 'Error fetching message' });
+  }
+};
+
+
+// Create a new message
+export const createMessage = async (req, res) => {
+  const { senderId, receiverId, messageText } = req.body;
+
+  try {
+    const newMessage = new Message({
+      senderId,
+      receiverId,
+      messageText,
+    });
+
+    const savedMessage = await newMessage.save();
+    res.status(201).json({ message: 'Message sent successfully', savedMessage });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    res.status(500).json({ error: 'Error sending message' });
+  }
+};
+
+
+
+
+
