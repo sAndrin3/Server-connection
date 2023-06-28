@@ -43,7 +43,7 @@ import {
 
 export const userRoutes = (app) => {
     app.route('/users')
-        .get(loginRequired, getUsers)
+        .get(getUsers)
         .post(loginRequired, createUser);
 
     app.route('/user/:id')
