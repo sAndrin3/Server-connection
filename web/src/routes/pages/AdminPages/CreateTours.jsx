@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './CreateTours.css';
-import { useLocation } from 'react-router-dom';
 
 function CreateTours() {
-  const location = useLocation()
-const [tours,setTours] = useState([]);
-  const { tourId } = useParams();
+  const location = useLocation();
+  const [tours, setTours] = useState([]);
+  const { TourID } = useParams();
+  // console.log(TourID);
   const navigate = useNavigate();
 
   const [tourData, setTourData] = useState({
@@ -16,32 +16,31 @@ const [tours,setTours] = useState([]);
     duration: '',
     price: ''
   });
-  let pathname = location.pathname.split('/')[3]
-  console.log(pathname);
-  console.log(tours)
-  const tour = tours.find((tour)=>tour.id == pathname)
-console.log(tour);
+
+  // let pathname = location.pathname.split('/')[3];
+  // console.log(pathname);
+  const tour = tours.find((tour) => tour.TourID == TourID);
+
   useEffect(() => {
     getaData();
-    if (tourId) {
-      // Fetch the tour details if tourId exists
+    if (TourID) {
+      // Fetch the tour details if TourID exists
       fetchTourDetails();
     }
-  }, [tourId]);
+  }, [TourID]);
 
- 
-    const getaData = async()=>{
-      const res = await fetch('http://localhost:8081/tours');
-      const data = await res.json();
-      setTours(data.tours);
-
+  const getaData = async () => {
+    try {
+      const response = await axios.get('http://localhost:8081/tours');
+      setTours(response.data.tours);
+    } catch (error) {
+      console.log('Error fetching tours:', error);
     }
-    // console.log(tours)
+  };
 
-// console.log(tourData)
   const fetchTourDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/tours/${tourId}`);
+      const response = await axios.get(`http://localhost:8081/tour/${TourID}`);
       const tour = response.data.tour;
       setTourData({
         title: tour.title,
@@ -49,17 +48,22 @@ console.log(tour);
         duration: tour.duration,
         price: tour.price
       });
-      console.log(tour)
     } catch (error) {
       console.log('Error fetching tour details:', error);
+      setTourData({
+        title: '',
+        description: '',
+        duration: '',
+        price: ''
+      });
     }
   };
-  
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setTourData((prevData) => ({
       ...prevData,
-      [e.target.name]: e.target.value
+      [name]: value
     }));
   };
 
@@ -68,23 +72,14 @@ console.log(tour);
 
     try {
       let response;
-      
-      if (tourId) {
-        console.log(tourData);
+
+      if (TourID) {
         // Update an existing tour
-        //response = await axios.put(`http://localhost:8081/tours/${tourId}`, tourData);
-        response = await fetch(`http://localhost:8081/tour/${tourId}`,{
-          method:"PUT",
-          headers:{
-            "Content-Type":"application/json"
-          },
-          body:JSON.stringify(tourData)
-        })
-        let data = await response.json();
-        console.log(data);
+        console.log(tourData);
+        response = await axios.put('http://localhost:8081/tour/'+TourID, tourData);
       } else {
-        // Create a new tour
         response = await axios.post('http://localhost:8081/tours', tourData);
+        // Create a new tour
       }
 
       if (response.status === 201 || response.status === 200) {
@@ -100,31 +95,30 @@ console.log(tour);
       console.log('Error saving tour:', error);
     }
   };
-
   return (
     <div className="ap">
       <div className="create-tours">
-        <h2 className="create-tours__heading">{tourId ? 'Update Tour' : 'Create Tour'}</h2>
+        <h2 className="create-tours__heading">{TourID ? 'Update Tour' : 'Create Tour'}</h2>
         <form className="create-tours__form" onSubmit={handleSubmit}>
           <div className="create-tours__form-group">
             <label className="create-tours__label">Title:</label>
             <input
               type="text"
               name="title"
-              value={tourData.title}
+              defaultValue={!TourID ? '' : tour?.title}
               onChange={handleChange}
               className="create-tours__input"
-              placeholder={tour?.title}
+              placeholder={!TourID ? '' : tour?.title}
             />
           </div>
           <div className="create-tours__form-group">
             <label className="create-tours__label">Description:</label>
             <textarea
               name="description"
-              value={tourData.description}
+              defaultValue={!TourID ? '' : tour?.description}
               onChange={handleChange}
               className="create-tours__textarea"
-              placeholder={tour?.description}
+              placeholder={!TourID ? '' : tour?.description}
             ></textarea>
           </div>
           <div className="create-tours__form-group">
@@ -132,10 +126,10 @@ console.log(tour);
             <input
               type="text"
               name="duration"
-              value={tourData.duration}
+              defaultValue={!TourID ? '' : tour?.duration}
               onChange={handleChange}
               className="create-tours__input"
-              placeholder={tour?.duration}
+              placeholder={!TourID ? '' : tour?.duration}
             />
           </div>
           <div className="create-tours__form-group">
@@ -143,15 +137,14 @@ console.log(tour);
             <input
               type="text"
               name="price"
-              value={tourData.price}
+              defaultValue={!TourID ? '' : tour?.price}
               onChange={handleChange}
-              placeholder={tour?.price}
+              placeholder={!TourID ? '' : tour?.price}
               className="create-tours__input"
-            
             />
           </div>
           <button type="submit" className="create-tours__button">
-            {tourId ? 'Update Tour' : 'Create Tour'}
+            {TourID ? 'Update Tour' : 'Create Tour'}
           </button>
         </form>
       </div>

@@ -37,15 +37,18 @@ export const getUser = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-    const { id, name } = req.body;
+    const { name, email, password, contactNumber, tourId } = req.body;
     let pool = await sql.connect(config.sql);
     await pool.request()
-      .input("UserId", sql.Int, id)
       .input("Name", sql.VarChar, name)
-      .query("INSERT INTO users (UserID, Name) VALUES (@UserId, @Name)");
+      .input("Email", sql.VarChar, email)
+      .input("Password", sql.VarChar, password)
+      .input("ContactNumber", sql.VarChar, contactNumber)
+      .input("TourID", sql.VarChar, tourId)
+      .query("INSERT INTO users ( Name, Email, password, ContactNumber, TourID) VALUES (@Name, @Email, @Password, @ContactNumber, @TourID)");
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while creating the user' });
+    res.status(500).json(error.message);
   } finally {
     sql.close();
   }
@@ -118,19 +121,23 @@ export const getAdmin = async (req, res) => {
 
 export const createAdmin = async (req, res) => {
   try {
-    const { id, name } = req.body;
+    const { Name, Email, Password } = req.body;
     let pool = await sql.connect(config.sql);
-    await pool.request()
-      .input("adminId", sql.Int, id)
-      .input("Name", sql.VarChar, name)
-      .query("INSERT INTO Admins (id, Name) VALUES (@AdminId, @Name)");
+    await pool
+      .request()
+      .input('Name', sql.VarChar, Name)
+      .input('Email', sql.VarChar, Email)
+      .input('Password', sql.VarChar, Password)
+      .query('INSERT INTO Admins (Name, Email, Password) VALUES (@Name, @Email, @Password)');
+
     res.status(201).json({ message: 'Admin created successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while creating the admin' });
+    res.status(500).json(error.message);
   } finally {
     sql.close();
   }
 };
+
 
 export const updateAdmin = async (req, res) => {
   try {
@@ -198,7 +205,7 @@ export const getTour = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while retrieving the tour' });
   } finally {
-    sql.close();
+    // sql.close();
   }
 };
 
@@ -240,11 +247,12 @@ export const updateTour = async (req, res) => {
     console.log(pool);
     const result = await pool
       .request()
+      .input("TourID", sql.VarChar, id)
       .input("Title", sql.VarChar, title)
       .input("Description", sql.VarChar, description)
       .input("Duration", sql.Int, duration)
-      .input("Price", sql.Float, price)
-      .query("UPDATE Tour SET Title = @Title, Description = @Description, Duration = @Duration, Price = @Price WHERE id = @id");
+      .input("Price", sql.Decimal, price)
+      .query("UPDATE Tour SET Title = @Title, Description = @Description, Duration = @Duration, Price = @Price WHERE TourID = @TourID");
 console.log(result);
     if (result.rowsAffected[0] === 0) {
       return res.status(404).json({ success: false, error: 'Tour not found' });
@@ -252,9 +260,9 @@ console.log(result);
     
     res.json({ success: true, message: 'Tour updated successfully' });
   } catch (error) {
-    res.status(500).json({ success: false, error: 'An error occurred while updating the tour' });
+    res.status(500).json(error.message);
   } finally {
-    sql.close();
+    // sql.close();
   }
 };
 
@@ -266,16 +274,16 @@ export const deleteTour = async (req, res) => {
     let pool = await sql.connect(config.sql);
     const result = await pool
       .request()
-      .input("id", sql.Int, id)
-      .query("DELETE FROM Tour WHERE id = @id");
+      .input("TourID", sql.Int, id)
+      .query("DELETE FROM Tour WHERE TourID = @TourID");
 
     if (result.rowsAffected[0] === 0) {
-      return res.status(404).json({ success: false, error: 'Tour not found' });
+      return res.status(404).json(error.message);
     }
 
     res.json({ success: true, message: 'Tour deleted successfully' });
   } catch (error) {
-    res.status(500).json({ success: false, error: 'An error occurred while deleting the tour' });
+    res.status(500).json(error.message);
   } finally {
     sql.close();
   }
@@ -324,7 +332,8 @@ export const getBooking = async (req, res) => {
 
 export const createBooking = async (req, res) => {
   try {
-    const { tourId, userId} = req.body;
+    const {  userId} = req.query;
+    const {tourId} = req.body
     let pool = await sql.connect(config.sql);
     await pool
       .request()

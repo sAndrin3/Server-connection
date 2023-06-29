@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Tours.css';
+import { Context } from '../../../context/userContext/Context';
 
 function Tours() {
+  const {user} = useContext(Context)
   const [tours, setTours] = useState([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -23,10 +25,10 @@ function Tours() {
 
   const handleBook = async (id) => {
     try {
-      const response = await axios.post('http://localhost:8081/bookings', {
-        tour_id: id,
-        user_id: 1, // Replace with the actual user ID
-        booking_date: new Date().toISOString().split('T')[0],
+      const response = await axios.post('http://localhost:8081/bookings?userId=${user.id}', {
+        tour_id: TourID,
+        user_id:JSON.parse(localStorage.getItem("user/profile")).id, // Replace with the actual user ID
+       
       });
 
       if (response.status === 201) {

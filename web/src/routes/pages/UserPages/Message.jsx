@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Message.css';
 
-function Message({ adminId }) {
+function Message({ adminId, loggedInUserId }) {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
 
@@ -27,8 +27,8 @@ function Message({ adminId }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          senderId: 1, // Replace with the actual user ID
-          receiverId: adminId,
+          senderId: loggedInUserId, // Use the logged-in user's ID as the sender ID
+          receiverId: 'all', // Specify 'all' as the receiver to send the message to all admins
           messageText: message,
         }),
       });

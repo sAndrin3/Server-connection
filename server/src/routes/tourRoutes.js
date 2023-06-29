@@ -44,7 +44,7 @@ import {
 export const userRoutes = (app) => {
     app.route('/users')
         .get(getUsers)
-        .post(loginRequired, createUser);
+        .post(createUser);
 
     app.route('/user/:id')
         .put(loginRequired, updateUser)
@@ -53,7 +53,7 @@ export const userRoutes = (app) => {
 
     app.route('/admins')
         .get( getAdmins)
-        .post(loginRequired, createAdmin);
+        .post(createAdmin);
 
     app.route('/admin/:id')
         .put(loginRequired, updateAdmin)
