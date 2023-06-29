@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './ViewTours.css';
+import { apiDomain } from '../../../Utils/Utils';
 
 function ViewTours() {
   const [tours, setTours] = useState([]);
@@ -14,7 +15,7 @@ function ViewTours() {
 
   const fetchTours = async () => {
     try {
-      const response = await axios.get('http://localhost:8081/tours');
+      const response = await axios.get(`${apiDomain}/tours`);
       setTours(response.data.tours);
     } catch (error) {
       setError(error.message);
@@ -29,7 +30,7 @@ function ViewTours() {
   const handleDelete = async (TourID) => {
     console.log(`Delete tour with TourID: ${TourID}`);
     try {
-      await axios.delete(`http://localhost:8081/tour/${TourID}`);
+      await axios.delete(`${apiDomain}/tour/${TourID}`);
       fetchTours();
     } catch (error) {
       setError(error.message);

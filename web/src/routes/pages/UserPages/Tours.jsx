@@ -5,7 +5,7 @@ import './Tours.css';
 import { Context } from '../../../context/userContext/Context';
 
 function Tours() {
-  const {user} = useContext(Context)
+  const { user } = useContext(Context);
   const [tours, setTours] = useState([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -23,14 +23,19 @@ function Tours() {
     fetchTours();
   }, []);
 
-  const handleBook = async (id) => {
+  const handleBook = async (TourID) => {
     try {
-      const response = await axios.post('http://localhost:8081/bookings?userId=${user.id}', {
-        tour_id: TourID,
-        user_id:JSON.parse(localStorage.getItem("user/profile")).id, // Replace with the actual user ID
-       
+      if (!user || !user.UserID) {
+        // Handle the case where user information is not available
+        // console.log('User information is not available.');
+        return;
+      }
+  
+      const response = await axios.post(`http://localhost:8081/bookings?userId=${user.UserID}`, {
+        tour_id:TourID,
+        user_id: user.UserID,
       });
-
+  
       if (response.status === 201) {
         console.log('Booking created:', response.data);
         // Show a success message or perform any other actions after successful booking
@@ -42,6 +47,7 @@ function Tours() {
       console.log('Error creating booking:', error.message);
     }
   };
+  
 
   if (error) {
     return <div>Error: {error}</div>;

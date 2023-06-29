@@ -8,6 +8,7 @@ import "./Register.css"
 import {FaEye, FaEyeSlash} from "react-icons/fa"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { apiDomain } from "../Utils/Utils.jsx";
 
 function Register() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ function Register() {
   });
 
   const onSubmit = (data) => {
-    axios.post("http://localhost:8081/auth/register", data)
+    axios.post(`${apiDomain}/auth/register`, data)
     .then((response) => {
       response.data.message && alert(response.data.message)
       navigate("/login");

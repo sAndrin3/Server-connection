@@ -45,7 +45,7 @@ function AdminProfile() {
           </div>
         </>
       ) : (
-        <div>No profile data available</div>
+        <div>Loading...</div>
       )}
     </div>
     </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './CreateTours.css';
+import { apiDomain } from '../../../Utils/Utils';
 
 function CreateTours() {
   const location = useLocation();
@@ -31,7 +32,7 @@ function CreateTours() {
 
   const getaData = async () => {
     try {
-      const response = await axios.get('http://localhost:8081/tours');
+      const response = await axios.get(`${apiDomain}/tours`);
       setTours(response.data.tours);
     } catch (error) {
       console.log('Error fetching tours:', error);
@@ -40,7 +41,7 @@ function CreateTours() {
 
   const fetchTourDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/tour/${TourID}`);
+      const response = await axios.get(`${apiDomain}/tour/${TourID}`);
       const tour = response.data.tour;
       setTourData({
         title: tour.title,
@@ -76,9 +77,9 @@ function CreateTours() {
       if (TourID) {
         // Update an existing tour
         console.log(tourData);
-        response = await axios.put('http://localhost:8081/tour/'+TourID, tourData);
+        response = await axios.put(`${apiDomain}/tour/+TourID`, tourData);
       } else {
-        response = await axios.post('http://localhost:8081/tours', tourData);
+        response = await axios.post(`${apiDomain}/tours`, tourData);
         // Create a new tour
       }
 
@@ -92,7 +93,7 @@ function CreateTours() {
         console.log('Error saving tour:', response.data);
       }
     } catch (error) {
-      console.log('Error saving tour:', error);
+      console.log(error.message);
     }
   };
   return (

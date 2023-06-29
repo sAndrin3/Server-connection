@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { apiDomain } from '../../../Utils/Utils';
 
 function Bookings() {
   const [bookings, setBookings] = useState([]);
@@ -11,7 +12,7 @@ function Bookings() {
 
   const fetchBookings = async () => {
     try {
-      const response = await axios.get('http://localhost:8081/bookings');
+      const response = await axios.get(`${apiDomain}/bookings`);
       setBookings(response.data.bookings);
     } catch (error) {
       setError(error.message);

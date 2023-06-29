@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../context/userContext/Context.jsx";
+import { apiDomain } from "../Utils/Utils.jsx";
 
 function Login() {
   const { user, admin, dispatch } = useContext(Context);
@@ -32,7 +33,7 @@ function Login() {
   const onSubmit = (data) => {
     if (data) {
       axios
-        .post("http://localhost:8081/auth/loginAdmin", data)
+        .post(`${apiDomain}/auth/loginAdmin`, data)
         .then(({ data }) => {
           if (data.token) {
             localStorage.setItem("admin", JSON.stringify(data));
@@ -43,10 +44,10 @@ function Login() {
           alert("Wrong credentials");
         });
     }
-z
+
     if (data) {
       axios
-        .post("http://localhost:8081/auth/login", data)
+        .post(`${apiDomain}/auth/login`, data)
         .then(({ data }) => {
           if (data.token) {
             localStorage.setItem("user/profile", JSON.stringify(data));
